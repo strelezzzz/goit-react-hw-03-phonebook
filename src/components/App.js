@@ -16,6 +16,25 @@ export class App extends Component {
     ],
     filter: '',
   };
+  // записуємо в локалСторейдж контакти , при умові що масив контактів змінився
+  componentDidUpdate(prevProps, prevState) {
+    // console.log('prevState:', prevState.contacts);
+    // console.log('this.state', this.state.contacts);
+    if (this.state.contacts !== prevState.contacts) {
+      // console.log('оновились контакти');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+  //записуємо в стейт контакти, при умові якщо вони є в локалСторейдж
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    // console.log(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
   //додає контакт у стейт
   addContacts = (name, number) => {
     //перевірка чи є ім'я у списку(метод Find повертає undefined, якщо не виконується умова)
